@@ -21,6 +21,7 @@ import {
   CATEGORY_COLORS,
   CLIENT_APP_FIREFOX,
   INCOMPATIBLE_FIREFOX_FOR_IOS,
+  INCOMPATIBLE_LEGACY_EXTENSION,
   INCOMPATIBLE_NO_OPENSEARCH,
   INCOMPATIBLE_NOT_FIREFOX,
   INCOMPATIBLE_UNDER_MIN_VERSION,
@@ -339,7 +340,16 @@ describe('isCompatibleWithUserAgent', () => {
       os: { name: 'Windows' },
     };
     expect(isCompatibleWithUserAgent({
-      addon: fakeAddon, maxVersion: '8', userAgentInfo })).toEqual({ compatible: true, reason: null });
+      addon: {
+        ...fakeAddon,
+        current_version: {
+          ...fakeAddon.current_version,
+          is_strict_compatibility_enabled: false,
+        },
+      },
+      maxVersion: '8',
+      userAgentInfo,
+    })).toEqual({ compatible: true, reason: null });
   });
 
   it('should mark Firefox as compatible when no min or max version', () => {
@@ -980,6 +990,52 @@ describe('getClientCompatibility', () => {
       maxVersion: null,
       minVersion: null,
       reason: null,
+    });
+  });
+
+  it('returns compatible for Firefox 57+ if WebExtension', () => {
+    const { browser, os } = UAParser(userAgents.firefox[4]);
+    const userAgentInfo = { browser, os };
+
+    expect(getClientCompatibility({
+      addon: {
+        ...fakeAddon,
+        current_version: {
+          ...fakeAddon.current_version,
+          files: [{ is_webextension: true }],
+        },
+        is_strict_compatibility_enabled: true,
+      },
+      clientApp: 'firefox',
+      userAgentInfo,
+    })).toMatchObject({ compatible: true });
+  });
+
+  it('returns incompatible for Firefox 57+ if not WebExtension', () => {
+    const { browser, os } = UAParser(userAgents.firefox[4]);
+    const userAgentInfo = { browser, os };
+
+    expect(getClientCompatibility({
+      addon: {
+        ...fakeAddon,
+        current_version: {
+          ...fakeAddon.current_version,
+          compatibility: {
+            ...fakeAddon.current_version.compatibility,
+            [CLIENT_APP_FIREFOX]: {
+              max: '56.*',
+              min: '*',
+            },
+          },
+          files: [{ is_webextension: false }],
+        },
+        is_strict_compatibility_enabled: true,
+      },
+      clientApp: 'firefox',
+      userAgentInfo,
+    })).toMatchObject({
+      compatible: false,
+      reason: INCOMPATIBLE_LEGACY_EXTENSION,
     });
   });
 });
