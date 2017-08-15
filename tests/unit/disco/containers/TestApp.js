@@ -7,11 +7,9 @@ import {
 } from 'react-addons-test-utils';
 import NestedStatus from 'react-nested-status';
 import { Provider } from 'react-redux';
-import { loadFail } from 'redux-connect/lib/store';
 
 import { AppBase, mapStateToProps } from 'disco/containers/App';
 import createStore from 'disco/store';
-import { createApiError } from 'core/api';
 import I18nProvider from 'core/i18n/Provider';
 import { getFakeI18nInst } from 'tests/unit/helpers';
 
@@ -86,11 +84,6 @@ describe('App', () => {
 describe('App errors', () => {
   it('renders a 404', () => {
     const { store } = createStore();
-    const error = createApiError({
-      apiURL: 'http://test.com',
-      response: { status: 404 },
-    });
-    store.dispatch(loadFail('ReduxKey', error));
 
     const rootNode = renderApp({ store });
     expect(rootNode.textContent).not.toContain('The component');
@@ -99,11 +92,6 @@ describe('App errors', () => {
 
   it('renders a generic error', () => {
     const { store } = createStore();
-    const error = createApiError({
-      apiURL: 'http://test.com',
-      response: { status: 500 },
-    });
-    store.dispatch(loadFail('ReduxKey', error));
 
     const rootNode = renderApp({ store });
     expect(rootNode.textContent).not.toContain('The component');

@@ -9,7 +9,6 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { applyRouterMiddleware, Router, browserHistory } from 'react-router';
-import { ReduxAsyncConnect } from 'redux-connect';
 import useScroll from 'react-router-scroll/lib/useScroll';
 
 import { langToLocale, makeI18n, sanitizeLanguage } from 'core/i18n/utils';
@@ -57,17 +56,8 @@ export default function makeClient(
       log.warn(`sagas not found for this app (src/${appName}/sagas)`);
     }
 
-    // wrapper to make redux-connect applyRouterMiddleware compatible see
-    // https://github.com/taion/react-router-scroll/issues/3
-    const useReduxAsyncConnect = () => ({
-      renderRouterContext: (child, props) => (
-        <ReduxAsyncConnect {...props}>{child}</ReduxAsyncConnect>
-      ),
-    });
-
     const middleware = applyRouterMiddleware(
       useScroll(),
-      useReduxAsyncConnect(),
     );
 
     render(

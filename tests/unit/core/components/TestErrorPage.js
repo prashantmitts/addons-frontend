@@ -5,10 +5,8 @@ import {
 } from 'react-addons-test-utils';
 import { findDOMNode } from 'react-dom';
 import { Provider } from 'react-redux';
-import { loadFail } from 'redux-connect/lib/store';
 
 import ErrorPage, { mapStateToProps } from 'core/components/ErrorPage';
-import { createApiError } from 'core/api';
 import { getFakeI18nInst } from 'tests/unit/helpers';
 import I18nProvider from 'core/i18n/Provider';
 import { dispatchSignInActions } from 'tests/unit/amo/helpers';
@@ -33,11 +31,6 @@ describe('<ErrorPage />', () => {
 
   it('renders an error page on error', () => {
     const { store } = dispatchSignInActions();
-    const error = createApiError({
-      apiURL: 'http://test.com',
-      response: { status: 404 },
-    });
-    store.dispatch(loadFail('ReduxKey', error));
 
     const rootNode = render({ children: <div>hello</div> }, store);
 

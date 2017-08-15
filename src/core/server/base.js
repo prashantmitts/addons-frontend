@@ -13,8 +13,6 @@ import ReactDOM from 'react-dom/server';
 import NestedStatus from 'react-nested-status';
 import { Provider } from 'react-redux';
 import { match } from 'react-router';
-import { ReduxAsyncConnect, loadOnServer } from 'redux-connect';
-import { loadFail } from 'redux-connect/lib/store';
 import { END } from 'redux-saga';
 import WebpackIsomorphicTools from 'webpack-isomorphic-tools';
 
@@ -23,8 +21,12 @@ import { createApiError } from 'core/api';
 import ServerHtml from 'core/containers/ServerHtml';
 import * as middleware from 'core/middleware';
 import { convertBoolean } from 'core/utils';
-import { setAuthToken, setClientApp, setLang, setUserAgent }
-  from 'core/actions';
+import {
+  setAuthToken,
+  setClientApp,
+  setLang,
+  setUserAgent,
+} from 'core/actions';
 import {
   getDirection,
   isValidLang,
@@ -97,7 +99,8 @@ function showErrorPage({ createStore, error = {}, req, res, status }) {
   }
 
   const apiError = createApiError({ response: { status: adjustedStatus } });
-  store.dispatch(loadFail('ServerBase', { ...apiError, ...error }));
+  // TODO: Dispatch a new load error for server-render errors.
+  // store.dispatch(loadFail('ServerBase', { ...apiError, ...error }));
 
   const HTML = ReactDOM.renderToString(
     <ServerHtml {...pageProps} />);

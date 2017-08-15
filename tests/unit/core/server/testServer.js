@@ -2,7 +2,6 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { Router, Route } from 'react-router';
 import { applyMiddleware, createStore, combineReducers } from 'redux';
-import { reducer as reduxAsyncConnect } from 'redux-connect';
 import createSagaMiddleware from 'redux-saga';
 import NestedStatus from 'react-nested-status';
 import supertest from 'supertest';
@@ -35,7 +34,7 @@ describe('core/server/base', () => {
       const sagaMiddleware = createSagaMiddleware();
       return {
         store: createStore(
-          combineReducers({ reduxAsyncConnect }),
+          combineReducers({}),
           // Do not define an initial state.
           undefined,
           applyMiddleware(sagaMiddleware),

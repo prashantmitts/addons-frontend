@@ -1,4 +1,3 @@
-import { hideLoading, showLoading } from 'react-redux-loading-bar';
 import SagaTester from 'redux-saga-tester';
 
 import categoriesSaga from 'amo/sagas/categories';
@@ -72,14 +71,8 @@ describe('categoriesSaga', () => {
     // First action is CATEGORIES_FETCH.
     expect(calledActions[0]).toEqual(_categoriesFetch());
 
-    // Next action is showing the loading bar.
-    expect(calledActions[1]).toEqual(showLoading());
-
     // Next action is loading the categories returned by the API.
-    expect(calledActions[2]).toEqual(actions.categoriesLoad({ result }));
-
-    // Last action is to hide the loading bar.
-    expect(calledActions[3]).toEqual(hideLoading());
+    expect(calledActions[1]).toEqual(actions.categoriesLoad({ result }));
 
     mockApi.verify();
   });
@@ -98,7 +91,6 @@ describe('categoriesSaga', () => {
 
     const calledActions = sagaTester.getCalledActions();
     expect(calledActions[2]).toEqual(errorAction);
-    expect(calledActions[3]).toEqual(hideLoading());
   });
 
   it('should respond to all CATEGORIES_FETCH actions', async () => {

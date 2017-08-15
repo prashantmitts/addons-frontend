@@ -1,4 +1,3 @@
-import { hideLoading, showLoading } from 'react-redux-loading-bar';
 import SagaTester from 'redux-saga-tester';
 
 import * as api from 'core/api';
@@ -58,11 +57,9 @@ describe('amo/sagas/featured', () => {
       mockApi.verify();
 
       const calledActions = sagaTester.getCalledActions();
-      expect(calledActions[1]).toEqual(showLoading());
-      expect(calledActions[2]).toEqual(loadFeatured({
+      expect(calledActions[1]).toEqual(loadFeatured({
         addonType, entities, result,
       }));
-      expect(calledActions[3]).toEqual(hideLoading());
     });
 
     it('dispatches an error', async () => {
@@ -75,7 +72,6 @@ describe('amo/sagas/featured', () => {
       await sagaTester.waitFor(errorAction.type);
       const calledActions = sagaTester.getCalledActions();
       expect(calledActions[2]).toEqual(errorAction);
-      expect(calledActions[3]).toEqual(hideLoading());
     });
   });
 });

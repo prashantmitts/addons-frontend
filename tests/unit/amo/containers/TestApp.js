@@ -6,7 +6,6 @@ import {
 } from 'react-addons-test-utils';
 import NestedStatus from 'react-nested-status';
 import { Provider } from 'react-redux';
-import { loadFail } from 'redux-connect/lib/store';
 
 import App, {
   AppBase,
@@ -18,11 +17,14 @@ import {
   logOutUser as logOutUserAction,
   setUserAgent as setUserAgentAction,
 } from 'core/actions';
-import { createApiError } from 'core/api';
 import DefaultErrorPage from 'core/components/ErrorPage';
 import { INSTALL_STATE, maximumSetTimeoutDelay } from 'core/constants';
 import I18nProvider from 'core/i18n/Provider';
-import { getFakeI18nInst, shallowUntilTarget, userAuthToken } from 'tests/unit/helpers';
+import {
+  getFakeI18nInst,
+  shallowUntilTarget,
+  userAuthToken,
+} from 'tests/unit/helpers';
 
 
 describe('App', () => {
@@ -165,12 +167,6 @@ describe('App', () => {
 
   it('renders an error component on error', () => {
     const { store } = createStore();
-    const apiError = createApiError({
-      apiURL: 'https://some-url',
-      response: { status: 404 },
-    });
-
-    store.dispatch(loadFail('App', apiError));
 
     const root = render({
       ErrorPage: DefaultErrorPage,

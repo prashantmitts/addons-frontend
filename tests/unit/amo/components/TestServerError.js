@@ -5,7 +5,6 @@ import {
 } from 'react-addons-test-utils';
 import { findDOMNode } from 'react-dom';
 import { Provider } from 'react-redux';
-import { loadFail } from 'redux-connect/lib/store';
 
 import ServerError from 'amo/components/ErrorPage/ServerError';
 import { createApiError } from 'core/api';
@@ -17,11 +16,6 @@ import { getFakeI18nInst } from 'tests/unit/helpers';
 describe('<ServerError />', () => {
   function render({ ...props }) {
     const { store } = dispatchSignInActions();
-    const error = createApiError({
-      apiURL: 'http://test.com',
-      response: { status: 500 },
-    });
-    store.dispatch(loadFail('ReduxKey', error));
 
     return findDOMNode(findRenderedComponentWithType(renderIntoDocument(
       <Provider store={store}>

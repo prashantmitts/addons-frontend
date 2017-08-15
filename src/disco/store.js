@@ -1,5 +1,4 @@
 import { createStore as _createStore, combineReducers } from 'redux';
-import { reducer as reduxAsyncConnect } from 'redux-connect';
 import createSagaMiddleware from 'redux-saga';
 
 import { middleware } from 'core/store';
@@ -23,7 +22,6 @@ export default function createStore(initialState = {}) {
       errorPage,
       installations,
       infoDialog,
-      reduxAsyncConnect,
     }),
     initialState,
     middleware({ sagaMiddleware }),

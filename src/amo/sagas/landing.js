@@ -2,7 +2,6 @@ import { oneLine } from 'common-tags';
 // Disabled because of
 // https://github.com/benmosher/eslint-plugin-import/issues/793
 /* eslint-disable import/order */
-import { hideLoading, showLoading } from 'react-redux-loading-bar';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 /* eslint-enable import/order */
 
@@ -21,8 +20,6 @@ export function* fetchLandingAddons(
 ) {
   const errorHandler = createErrorHandler(errorHandlerId);
   try {
-    yield put(showLoading());
-
     const state = yield select(getState);
     const { api } = state;
     const filters = { addonType, page_size: LANDING_PAGE_ADDON_COUNT };
@@ -49,8 +46,6 @@ export function* fetchLandingAddons(
       addonType ${addonType}: ${error}`);
 
     yield put(errorHandler.createErrorAction(error));
-  } finally {
-    yield put(hideLoading());
   }
 }
 
